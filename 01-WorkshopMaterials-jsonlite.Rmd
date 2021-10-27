@@ -1,0 +1,119 @@
+# Practice Materials on jsonlite
+
+### Get to know the package and data type:
+
+First, we have to load the package:
+```{r load_json}
+# if necessary: install.packages("jsonlite")
+library(jsonlite)
+library(tidyverse)
+```
+
+First, what does JSON actually look like?
+
+```{r without}
+
+```
+
+
+Simplification is the process where JSON arrays automatically get converted from a list into a more specific R class. The fromJSON function has 3 arguments which control the simplification process: simplifyVector, simplifyDataFrame and simplifyMatrix. Each one is enabled by default.
+
+```{r writeJSON}
+# We can write own JSON data (just for demonstration):
+
+todays_instructors <-
+'[
+{
+"Name": "Milan",
+"Age": 25,
+"Programme": "MIA"
+},
+{
+"Name": "Sangeeth",
+"Age": "NA",
+"Programme": "MPP"
+}
+]'
+
+print(todays_instructors) # This shows us that computers have a strange taste...
+(simplified <- fromJSON(todays_instructors)) # that's much better!
+(not_simplified <- fromJSON(todays_instructors, simplifyVector = FALSE)) # but this may also help to grasp the structure of the list...
+```
+Note that all of the above contain the same information.
+And JSON can store more complex structures...
+
+JSON objects can be nested. 
+Think of them as list, that may contain, values, vectors, dataframes, or even other lists.
+
+```{r nested}
+# add nested data to objects
+
+
+# sometimes, it is better to flatten objects (dataframes are usually easier to work with than lists)
+
+
+```
+
+
+Now, 
+
+```{r fromJSON}
+##Change to data frame
+(fromJSON(todays_instructors))
+```
+
+
+```{r toJSON}
+## Change data frame back to JSON
+todays_instructors_JSON = toJSON(todays_instructors, pretty=TRUE)
+print(todays_instructors_JSON)
+```
+
+# See it in Action
+
+Let's try it out, using an API: 
+
+```{r API}
+(workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos"))
+
+names(workshops) # Let's see what's in it!
+
+workshops$name # we can call them
+workshops[[10]] # or index
+
+workshops %>% select(name, description, updated_at)
+# They all sound super interesting, make sure to check them out!
+```
+
+# Now it's your turn!
+
+try to load the data in the folder, manipulate it (either in JSON-Format or converted to a tibble), and convert it back!
+
+(maybe we need a list of resources on JSON here?)
+
+```{r}
+# Your code here:
+```
+
+
+# Sources
+### If we got you interested, there are some really good resources online, that help you getting started with JSON/jsonlite:
+
+- https://www.json.org/json-en.html
+- https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html
+- https://cran.r-project.org/web/packages/jsonlite/index.html # type: help(jsonlite)
+- https://arxiv.org/abs/1403.2805
+```{r}
+citation <- 
+'@misc{ooms2014jsonlite,
+ title={The jsonlite Package: A Practical and Consistent Mapping Between JSON Data and R Objects},
+ author={Jeroen Ooms},
+ year={2014},
+ eprint={1403.2805},
+ archivePrefix={arXiv},
+ primaryClass={stat.CO}
+}'
+# make this work:
+# fromJSON(citation)
+```
+
