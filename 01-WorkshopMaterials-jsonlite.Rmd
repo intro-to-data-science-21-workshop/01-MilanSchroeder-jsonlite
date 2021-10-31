@@ -1,19 +1,40 @@
-# Practice Materials on jsonlite
+---
+title: "Workshop Materials: JSON & jsonlite"
+author: "[Sangeeth Selvaraju](https://github.com/RajaSangeeth) & [Milan Schröder](https://github.com/milanschroeder)"
+date: "`r format(Sys.time(), '%B %d, %Y | %H:%M:%S | %Z')`"
+output:
+  html_document:
+    code_folding: show
+    df_print: paged
+    highlight: tango
+    number_sections: no
+    theme: cosmo
+    toc: no
+---
 
 ### Get to know the package and data type:
 
 First, we have to load the package:
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = TRUE,
+                      error = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = TRUE)
+```
+
+
 ```{r load_json}
-# if necessary: install.packages("jsonlite")
+# if necessary: 
+# install.packages("jsonlite")
+# install.packages("RJSONIO")
 library(jsonlite)
 library(tidyverse)
+library(RJSONIO)
 ```
 
 First, what does JSON actually look like?
-
-```{r without}
-
-```
 
 
 Simplification is the process where JSON arrays automatically get converted from a list into a more specific R class. The fromJSON function has 3 arguments which control the simplification process: simplifyVector, simplifyDataFrame and simplifyMatrix. Each one is enabled by default.
@@ -26,74 +47,194 @@ todays_instructors <-
 {
 "Name": "Milan",
 "Age": 25,
-"Programme": "MIA"
+"Programme": "MIA",
+"Likes_IDS_class": "true"
 },
 {
 "Name": "Sangeeth",
-"Age": "NA",
-"Programme": "MPP"
+"Age": 25,
+"Programme": "MPP",
+"Likes_IDS_class": "NA"
+}
+]'
+```
+
+Remember the chart from our presentation?
+<img src="https://www.json.org/img/object.png" height=440>
+That's exactly what we did here!
+
+```{r isJSON}
+RJSONIO::isValidJSON(todays_instructors, 
+                     asText = T)
+# note that if we would e.g. have forgotten some "", it wouldn't be a valid JSON object.
+```
+
+Our Data is actually a valid JSON object!
+
+```{r}
+print(todays_instructors)
+```
+
+Not very easy to read (or use) as raw text... let's convert it (using one of two key functions of the 'jsonlite' package: 'fromJSON')
+
+```{r}
+(not_simplified <- jsonlite::fromJSON(todays_instructors, 
+                                      simplifyDataFrame = F))
+```
+
+Looks somehow familiar?!
+It's basically the structure of a (named) list in R 
+
+
+```{r}
+str(not_simplified)
+```
+
+More specifically, it's a list of 2 which each represent lists of each key-value pair
+
+...but it's still rather difficult to access (especially if you want multiple values...)
+
+```{r example_access}
+not_simplified[[1]]$Likes_IDS_class
+```
+
+## short excurse: 'RJSONIO'
+
+Just to show that there is another package that deals with JSON data in R:
+
+The 'RJSONIO' package also has a command called 'fromJSON', which gives us a slightly different structure:
+
+```{r}
+(alternative_list <- RJSONIO::fromJSON(todays_instructors, 
+                                       simplify = T))
+str(alternative_list)
+```
+
+This gives us a list of 2 named vectors... that looks very much like a dataframe... and can easily be transformed:
+
+```{r}
+as.data.frame(alternative_list)
+# unload RJSONIO package, to avoid confusion of functions:
+detach("package:RJSONIO")
+```
+But: it's a 4x2 dataframe, with variables as rows and cases as columns... not what R would usually expect. So better stick to 'jsonlite'
+
+## back to 'jsonlite'
+
+
+We can do for the first list from 'jsonlite'´s 'fromJSON':
+
+```{r}
+bind_rows(not_simplified[[1]] %>% 
+            as_data_frame(), 
+          not_simplified[[2]] %>% 
+            as_data_frame())
+```
+
+... but both is rather lengthy...
+
+Luckily, 'jsonlite' allows us to do all that in just one step, using the 'simplified' option (which is also set to 'true' by default!)
+
+```{r}
+(simplified <- jsonlite::fromJSON(todays_instructors, 
+                                  simplifyDataFrame = T)) 
+```
+
+
+... And JSON can store more complex structures like nested objects:
+
+Think of them as lists, that may contain, values, vectors, dataframes, or even other lists.
+
+```{r create_nested}
+nested_object <- 
+'[
+{
+"value": 42,
+"array": [1,2],
+"array": [99,98],
+"matrix": [[1,2],[3,4]],
+"list": {"first": 42, "second": 3.141593, "last": "MMXXI", "addition": {"another list": ["a", "b", "C"]}}
+},
+{
+"something": [99,-10],
+"value": 33,
+"array": [3,4,5,6]
 }
 ]'
 
-print(todays_instructors) # This shows us that computers have a strange taste...
-(simplified <- fromJSON(todays_instructors)) # that's much better!
-(not_simplified <- fromJSON(todays_instructors, simplifyVector = FALSE)) # but this may also help to grasp the structure of the list...
+# Note that "array" occurs twice in one object. The second entry is just ignored when converted!
 ```
-Note that all of the above contain the same information.
-And JSON can store more complex structures...
 
-JSON objects can be nested. 
-Think of them as list, that may contain, values, vectors, dataframes, or even other lists.
+But can we change this structure to a dataframe, too?
 
 ```{r nested}
-# add nested data to objects
-
-
-# sometimes, it is better to flatten objects (dataframes are usually easier to work with than lists)
-
-
+(nested_df <- fromJSON(nested_object))
+nested_df$array
+nested_df$matrix
+nested_df$list
 ```
 
 
-Now, 
 
-```{r fromJSON}
-##Change to data frame
-(fromJSON(todays_instructors))
-```
 
+
+
+# Second key command: 'toJSON'
+
+We can convert objects from JSON, so of course we also can convert them back:
 
 ```{r toJSON}
-## Change data frame back to JSON
-todays_instructors_JSON = toJSON(todays_instructors, pretty=TRUE)
-print(todays_instructors_JSON)
+## Change data frame to JSON
+(not_pretty <- toJSON(starwars, pretty = FALSE)) # that's the default!
+(pretty <- starwars %>% toJSON(pretty = TRUE)) # but that's much nicer!
 ```
+
+
+
+
+
 
 # See it in Action
 
-Let's try it out, using an API: 
+Let's try it out, using the ([GitHub API](https://api.github.com/)):
 
-```{r API}
-(workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos"))
-
-names(workshops) # Let's see what's in it!
-
-workshops$name # we can call them
-workshops[[10]] # or index
-
-workshops %>% select(name, description, updated_at)
-# They all sound super interesting, make sure to check them out!
+```{r}
+(workshops = jsonlite::fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos"))
 ```
+
+Let's see what's in it...
+
+```{r}
+names(workshops)
+```
+
+We can call, index, or select variables, just as in any dataframe in R!
+
+```{r}
+workshops$name 
+workshops[[10]]
+workshops %>% select(name, description, updated_at)
+```
+
+They all sound super interesting, so **make sure to check them out**!
+
+
+
+
 
 # Now it's your turn!
 
 try to load the data in the folder, manipulate it (either in JSON-Format or converted to a tibble), and convert it back!
 
-(maybe we need a list of resources on JSON here?)
+try for example: https://pokeapi.co/api/v2/pokedex
+or use the 'palmerpenguins::penguins', or 'cars'  dataset.
 
 ```{r}
 # Your code here:
 ```
+
+
+
 
 
 # Sources
@@ -102,18 +243,22 @@ try to load the data in the folder, manipulate it (either in JSON-Format or conv
 - https://www.json.org/json-en.html
 - https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html
 - https://cran.r-project.org/web/packages/jsonlite/index.html # type: help(jsonlite)
+- https://github.com/jdorfman/Awesome-JSON-Datasets # a selection of JSON datasets on various topics
 - https://arxiv.org/abs/1403.2805
-```{r}
-citation <- 
-'@misc{ooms2014jsonlite,
- title={The jsonlite Package: A Practical and Consistent Mapping Between JSON Data and R Objects},
- author={Jeroen Ooms},
- year={2014},
- eprint={1403.2805},
- archivePrefix={arXiv},
- primaryClass={stat.CO}
-}'
-# make this work:
-# fromJSON(citation)
-```
+
+
+
+
+
+<p style="text-align: center;"><span style="color: #808080;"><em>Prepared for Intro to Data Science, taught by Simon Munzert</em></span></p>
+<p style="text-align: center;"><span style="color: #808080;"><em><a href="https://www.hertie-school.org/en/">Hertie School, Berlin</em></span></p>
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" >
+
+<!-- Add font awesome icons -->
+<p style="text-align: center;">
+    <a href="https://github.com/intro-to-data-science-21"  <i class="fab fa-github"></i><a>
+</p>
+
 

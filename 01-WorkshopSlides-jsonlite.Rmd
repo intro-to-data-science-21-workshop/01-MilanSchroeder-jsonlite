@@ -1,42 +1,93 @@
 ---
 title: "Workshop 1: Working with JSON & jsonlite"
-author: "milanschroeder"
-institute: "Hertie School | [GRAD-C11/E1339](https://github.com/intro-to-data-science-21)"
+author: "[Sangeeth Selvaraju](https://github.com/RajaSangeeth) & [Milan Schröder](https://github.com/milanschroeder)"
+institute: "Hertie School | [Intro to Data Science Workshop](https://github.com/intro-to-data-science-21-workshop)"
 output: 
   xaringan::moon_reader:
     ioslides_presentation:
-    self_contained: true
-    widescreen: true
-    smaller: true
+      incremental: true
+      self_contained: true
+      widescreen: true
+      smaller: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = TRUE,
+                      error = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = TRUE)
 library(pacman)
-p_load(xaringan)
+p_load(xaringan, jsonlite, tidyverse)
 ```
 
-## R Markdown
+# Intro
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# 1st slide
+- What is JSON?
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+- History of the package
 
-## Slide with Bullets
+---
+#Intro
+## 2nd slide
+- Benefits of using JSON
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Where is it used?
 
-## Slide with R Output
+---
+# Structure of JSON objects
 
-```{r cars, echo = TRUE}
-summary(cars)
+- object (think: list in R)
+
+- array
+
+- value
+---
+# object
+<img src="https://www.json.org/img/object.png" height=440>
+---
+# array
+<img src="https://www.json.org/img/array.png" heght=440>
+---
+# value
+<img src="https://www.json.org/img/value.png" heght=440>
+
+---
+
+# Key functions:
+
+.pull-left[
+## fromJSON
+
+```{r fromJSON}
+# fromJSON(todays_instructors, simplify = T, nullValue = F)
+
+workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
+
+workshops %>% select(name, description, updated_at)
+# They all sound super interesting, make sure to check them out!
 ```
 
-## Slide with Plot
+]
 
-```{r pressure}
-plot(pressure)
+.pull-right[
+## toJSON
+
+```{r toJSON}
+# toJSON(todays_instructors, pretty = T)
+toJSON(starwars, pretty = T)
+```
+]
+
+---
+# Practice Example
+
+```{r example}
+# Pokedex_JSON
+# Pokedex_df
+
+# some_funny_analysis
 ```
 

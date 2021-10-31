@@ -1,7 +1,7 @@
 # Working with JSON & jsonlite
 Join our Workshop on jsonlite: A Simple and Robust JSON Parser and Generator for R!
 
-The Workshop will be jointly held by Sangeeth Selvaraju & Milan Schröder at 10am on November 4th 2021.
+The Workshop will be jointly held by Sangeeth Selvaraju & Milan Schröder at 10am on November 4th, 2021.
 
 ## Summary
 
@@ -13,13 +13,16 @@ This session will introduce you to
 
 ### Main learning objectives
 
-The goals of this session are to (1) equip you with conceptual knowledge about the jsonlite package and data wrangling workflow, (2) show you the some key verbs of the pacakge, and (3) provide you with practice material as well as some further readings.
+The goals of this session are to 
+(1) equip you with conceptual knowledge about the jsonlite package and the JSON data format
+(2) show you the some key verbs of the package, and 
+(3) provide you with practice material as well as some further readings.
 
 
 ## Instructors
 
-- Sangeeth Selvaraju ([github](https://github.com/RajaSangeeth))
-- Milan Schröder ([github](https://github.com/milanschroeder))
+- Sangeeth Selvaraju ([github](https://github.com/RajaSangeeth)  
+- Milan Schröder ([github](https://github.com/milanschroeder)) | ([LinkedIn](https://www.linkedin.com/in/milan-schroeder/))
 
 
 ## Further resources
@@ -32,6 +35,6 @@ The material in this repository is made available under the [MIT license](http:/
 
 ## Statement of contributions
 
-**Sangeeth Selvaraju** prepared the practice material and post-processed the recording.
+**Sangeeth Selvaraju** prepared the presentation and practice material.
 
-**Milan Schröder** prepared the presentation slides and recording. He also provided an example to the practice material.
+**Milan Schröder** prepared the script used in the presentation and the workshop, and formatted the presentation.
