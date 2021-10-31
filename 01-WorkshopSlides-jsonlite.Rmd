@@ -77,7 +77,7 @@ workshops %>% select(name, description, updated_at)
 
 ```{r toJSON}
 # toJSON(todays_instructors, pretty = T)
-toJSON(starwars, pretty = T)
+starwars %>% slice_sample(n = 3) %>% toJSON(pretty = T)
 ```
 ]
 
