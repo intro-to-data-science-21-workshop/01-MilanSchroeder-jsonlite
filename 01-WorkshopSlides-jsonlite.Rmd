@@ -33,15 +33,27 @@ p_load(xaringan, jsonlite, tidyverse)
 
 ## 1st slide
 - What is JSON?
+- JavaScript Object Notation: Is a standard open file format and data interchange format that uses human readable text to store and transmit data objects.
+- It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
+
 
 - History of the package
+- Douglas Crockford originally specified the JSON format in the early 2000's
+- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
+- It was eventually sold to Sun Microsystems, Amazon, EDS. The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
+- Fun fact: Crockford added a clause in the JSON license stating that "The software shall we used for Good and not evil" in order to open source it and mock corporate lawyers. 
 
 ---
 #Intro
 ## 2nd slide
 - Benefits of using JSON
+- JSON is the superior version of XML
+- It has easy syntax
+- It's supported across many browsers so it is compatible with many browsers
+Most importantly for us: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
 
 - Where is it used?
+- It is mostly used in web API's and for web development 
 
 ---
 # Data Structures in JSON
