@@ -52,8 +52,8 @@ class: center, middle, inverse, title-slide
 
 - value
   - no direct representation in R
-  - some are similar to vector of length 1
-  - values can be nested
+  - one-element values are similar to vectors of length 1
+  - but they can also consist of multiple elements
 
 ---
 # object
@@ -71,39 +71,29 @@ class: center, middle, inverse, title-slide
 
 
 ```r
-&gt; workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
-&gt; 
-&gt; workshops %&gt;% 
-+   filter(!is.na(description)) %&gt;% 
-+   select(description)
+&gt; JSON_array &lt;- '[1, true, null, "string"]'
+&gt; fromJSON(JSON_array)
 ```
 
 ```
-                                                                                                                                                                                                                                                                                                                                       description
-  1                                                                                                                                                                                                                                                                                                 How to create interactive graphics with plotly
-  2                                                                                  This repository provides materials for a session that is part of the IDS Tools for Data Science workshop run at the Hertie School Berlin in November 2021. This workshop-session you new insights into working with Coordinate Reference Systems (CRS) in R. 
-  3                                                                                                                                                                                                                                                                                                         A template repository for the workshop
-  4                                                                                                                                                                                                                                                                                               Frontend of I2DS Tools for Data Science Workshop
-  5                                                                               This repository introduces you to the basics of the quanteda package, presented by Laura Menicacci and Dinah Rabe in the context of the Introduction for Data Science workshop, organised by Prof. Simon Munzert at the Hertie School (Berlin) in November 2021.
-  6                                                                                                                                                                                                                  Together with my classmate Claudia Zwar, we will introduce you to the package Janitor and its functions to clean dirty data. 
-  7  This short student-run workshop is part of the course I2DS Tools for Data Science workshop at the Hertie School, Berlin taught by Simon Munzert at the Hertie School, Berlin, Fall-Semester 2021. It is taking place in November 2021. This particular workshop will teach how to work with dates and times using the Lubridate package in R.
-  8                                                                                                                                            This repository provides materials for the session on Regular Expressions with Stringr that is part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2021. 
-  9                                                                                                                                                                                                                                                                                Inroduction to creating web APIs in R using the plumber package
-  10                                                                                                                                                                                                                                                           Regular expressions with stringr – A workshop from Anna-Lisa Wirth and Lukas Warode
-  11                                                                                                            This repository, organized by Andrew Wells and Fernanda Candido Gomes, provides materials for the session "Geocoding with SF", part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2021.
-  12                                                                                                                                                                                                                                                                               This workshop covers network graphs using ggraph and tidygraph.
-  13                                                                                                                                                                                                                                           Intro to working with categorical variables in R using forcats by Janine De Vera and Victor Möslein
-  14                                                                                                                                                                                                     Workshop presentation on analyzing temporal data with Tsibble, by Kabir Sandrolini &amp; Maren Rieker, students at the Hertie School, Berlin.
-  15                                                                                                                                                                                                This repository provides materials for a workshop presentation on "Interactive maps with leaflet" presented by Florian Winkler and Jiayu Yang.
-  16                                                                                                                                                                                                                                                            Join our Workshop on jsonlite: A Simple and Robust JSON Parser and Generator for R
-  17                                                                                                                                                                                                                                                                                                                   Sofia Lai &amp; Marina Luna MPP
-  18                                                                                                                                                                                                                                                                 Learn how to incorporate data from Web APIs into your data science workflow! 
-  19                                                                                                                                                          This repository, by Caroline Cavallari and Jose de Los Heros, provides materials for learning how to connect to Web APIs, which will be presented as a workshop at the Hertie School
-  20                                                                                                                                                                                                                      Through this presentation, Elena and I will introduce you to stringr package and some cool string manipulation exercises
+  [1] "1"      "TRUE"   NA       "string"
 ```
+
+
 
 ```r
-&gt; # Make sure to check out the other workshops, too!
+&gt; JSON_object &lt;- 
++ '[
++ {"key": "value", "one": 1, "any_questions?": false},
++ {"key": null, "one": "NA", "any_questions?": true}
++ ]'
+&gt; fromJSON(JSON_object)
+```
+
+```
+      key one any_questions?
+  1 value   1          FALSE
+  2  &lt;NA&gt;  NA           TRUE
 ```
 
 ---
@@ -112,38 +102,21 @@ class: center, middle, inverse, title-slide
 
 
 ```r
-&gt; starwars %&gt;% slice_sample(n = 2) %&gt;% 
+&gt; starwars %&gt;% slice_sample(n = 1) %&gt;% 
 +   toJSON(pretty = T)
 ```
 
 ```
   [
     {
-      "name": "Cordé",
-      "height": 157,
+      "name": "Rey",
       "hair_color": "brown",
       "skin_color": "light",
-      "eye_color": "brown",
+      "eye_color": "hazel",
       "sex": "female",
       "gender": "feminine",
-      "homeworld": "Naboo",
       "species": "Human",
-      "films": ["Attack of the Clones"],
-      "vehicles": [],
-      "starships": []
-    },
-    {
-      "name": "Dud Bolt",
-      "height": 94,
-      "mass": 45,
-      "hair_color": "none",
-      "skin_color": "blue, grey",
-      "eye_color": "yellow",
-      "sex": "male",
-      "gender": "masculine",
-      "homeworld": "Vulpter",
-      "species": "Vulptereen",
-      "films": ["The Phantom Menace"],
+      "films": ["The Force Awakens"],
       "vehicles": [],
       "starships": []
     }
@@ -151,6 +124,8 @@ class: center, middle, inverse, title-slide
 ```
 
 ---
+
+## Potential Issues: Dealing with NAs
 
 R knows different `NA`-values, but JSON only has `null` to represent those...
 
@@ -160,11 +135,11 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
   
 
 ```r
-&gt; (toJSON(c(3.14, NA, NaN, 21, Inf, -Inf)))
+&gt; (toJSON(c(3.14, NA, NaN, 42, Inf, -Inf)))
 ```
 
 ```
-  [3.14,"NA","NaN",21,"Inf","-Inf"]
+  [3.14,"NA","NaN",42,"Inf","-Inf"]
 ```
   
 - You can choose to represent them as null
@@ -173,18 +148,18 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 
 ```r
-&gt; (toJSON(c(3.14, NA, NaN, 21, Inf, -Inf), na = "null"))
+&gt; (toJSON(c(3.14, NA, NaN, 42, Inf, -Inf), na = "null"))
 ```
 
 ```
-  [3.14,null,null,21,null,null]
+  [3.14,null,null,42,null,null]
 ```
 
 
 
 ---
 
-## Changing back and forth
+## Potential Issues: Converting back and forth
 
 - Note that there is no guaranteed one-to-one correspondence of R and JSON objects:
   - it will still be the encoded data
@@ -192,76 +167,112 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 
 ```r
-&gt; (example &lt;- slice_sample(starwars, n = 2))
+&gt; (example &lt;- slice_sample(starwars[1:5], n = 2))
 ```
 
 ```
-  # A tibble: 2 x 14
-    name       height  mass hair_color skin_color eye_color birth_year sex   gender
-    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-  1 Jocasta Nu    167    NA white      fair       blue              NA fema~ femin~
-  2 Yoda           66    17 white      green      brown            896 male  mascu~
-  # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-  #   vehicles &lt;list&gt;, starships &lt;list&gt;
+  # A tibble: 2 x 5
+    name       height  mass hair_color skin_color
+    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+  1 Mas Amedda    196    NA none       blue      
+  2 Mace Windu    188    84 none       dark
 ```
 
 ```r
-&gt; fromJSON(toJSON(example))
+&gt; fromJSON(toJSON(example[1:5]))
 ```
 
 ```
-          name height hair_color skin_color eye_color    sex    gender homeworld
-  1 Jocasta Nu    167      white       fair      blue female  feminine Coruscant
-  2       Yoda     66      white      green     brown   male masculine      &lt;NA&gt;
-           species
-  1          Human
-  2 Yoda's species
-                                                                                                         films
-  1                                                                                       Attack of the Clones
-  2 The Empire Strikes Back, Attack of the Clones, The Phantom Menace, Revenge of the Sith, Return of the Jedi
-    vehicles starships mass birth_year
-  1     NULL      NULL   NA         NA
-  2     NULL      NULL   17        896
+          name height hair_color skin_color mass
+  1 Mas Amedda    196       none       blue   NA
+  2 Mace Windu    188       none       dark   84
 ```
+
+---
+
+## Two more functions from the package:
 
 if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
 
-```r
-&gt; unserializeJSON(serializeJSON(example))
-```
-
-```
-  # A tibble: 2 x 14
-    name       height  mass hair_color skin_color eye_color birth_year sex   gender
-  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-  1 Jocasta Nu    167    NA white      fair       blue              NA fema~ femin~
-  2 Yoda           66    17 white      green      brown            896 male  mascu~
-  # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-  #   vehicles &lt;list&gt;, starships &lt;list&gt;
-```
-
-But the downside is that the JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
-
 
 ```r
-&gt; serializeJSON(example)
+&gt; unserializeJSON(serializeJSON(example[1:5]))
 ```
 
 ```
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","height","mass","hair_color","skin_color","eye_color","birth_year","sex","gender","homeworld","species","films","vehicles","starships"]},"row.names":{"type":"integer","attributes":{},"value":[1,2]},"class":{"type":"character","attributes":{},"value":["tbl_df","tbl","data.frame"]}},"value":[{"type":"character","attributes":{},"value":["Jocasta Nu","Yoda"]},{"type":"integer","attributes":{},"value":[167,66]},{"type":"double","attributes":{},"value":["NA",17]},{"type":"character","attributes":{},"value":["white","white"]},{"type":"character","attributes":{},"value":["fair","green"]},{"type":"character","attributes":{},"value":["blue","brown"]},{"type":"double","attributes":{},"value":["NA",896]},{"type":"character","attributes":{},"value":["female","male"]},{"type":"character","attributes":{},"value":["feminine","masculine"]},{"type":"character","attributes":{},"value":["Coruscant",null]},{"type":"character","attributes":{},"value":["Human","Yoda's species"]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":["Attack of the Clones"]},{"type":"character","attributes":{},"value":["The Empire Strikes Back","Attack of the Clones","The Phantom Menace","Revenge of the Sith","Return of the Jedi"]}]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":[]},{"type":"character","attributes":{},"value":[]}]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":[]},{"type":"character","attributes":{},"value":[]}]}]}
+  # A tibble: 2 x 5
+    name       height  mass hair_color skin_color
+  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+  1 Mas Amedda    196    NA none       blue      
+  2 Mace Windu    188    84 none       dark
 ```
 
+
+
+This allows you to convert back and get the exact same structure back...
 
 ---
-# Practice Example
+
+## Two more functions from the package:
+
+...But it comes with a downside: 
+The JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
 
 
 ```r
-&gt; # Pokedex_JSON
-&gt; # Pokedex_df
-&gt; 
-&gt; # some_funny_analysis
+&gt; serializeJSON(example, pretty = TRUE)
 ```
+
+```
+  {
+    "type": "list",
+    "attributes": {
+      "names": {
+        "type": "character",
+        "attributes": {},
+        "value": ["name", "height", "mass", "hair_color", "skin_color"]
+      },
+      "row.names": {
+        "type": "integer",
+        "attributes": {},
+        "value": [1, 2]
+      },
+      "class": {
+        "type": "character",
+        "attributes": {},
+        "value": ["tbl_df", "tbl", "data.frame"]
+      }
+    },
+    "value": [
+      {
+        "type": "character",
+        "attributes": {},
+        "value": ["Mas Amedda", "Mace Windu"]
+      },
+      {
+        "type": "integer",
+        "attributes": {},
+        "value": [196, 188]
+      },
+      {
+        "type": "double",
+        "attributes": {},
+        "value": ["NA", 84]
+      },
+      {
+        "type": "character",
+        "attributes": {},
+        "value": ["none", "none"]
+      },
+      {
+        "type": "character",
+        "attributes": {},
+        "value": ["blue", "dark"]
+      }
+    ]
+  }
+```
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

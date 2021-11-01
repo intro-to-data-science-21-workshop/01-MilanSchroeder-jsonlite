@@ -60,8 +60,8 @@ p_load(xaringan, jsonlite, tidyverse)
 
 - value
   - no direct representation in R
-  - some are similar to vector of length 1
-  - values can be nested
+  - one-element values are similar to vectors of length 1
+  - but they can also consist of multiple elements
 
 ---
 # object
@@ -77,13 +77,19 @@ p_load(xaringan, jsonlite, tidyverse)
 
 # Key functions: `fromJSON`
 
-```{r fromJSON}
-workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
+```{r fromJSONarray}
+JSON_array <- '[1, true, null, "string"]'
+fromJSON(JSON_array)
+```
 
-workshops %>% 
-  filter(!is.na(description)) %>% 
-  select(description)
-# Make sure to check out the other workshops, too!
+
+```{r fromJSONvalue}
+JSON_object <- 
+'[
+{"key": "value", "one": 1, "any_questions?": false},
+{"key": null, "one": "NA", "any_questions?": true}
+]'
+fromJSON(JSON_object)
 ```
 
 ---
@@ -91,11 +97,13 @@ workshops %>%
 # Key functions: `toJSON`
 
 ```{r toJSON}
-starwars %>% slice_sample(n = 2) %>% 
+starwars %>% slice_sample(n = 1) %>% 
   toJSON(pretty = T)
 ```
 
 ---
+
+## Potential Issues: Dealing with NAs
 
 R knows different `NA`-values, but JSON only has `null` to represent those...
 
@@ -104,7 +112,7 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
   - but all information is preserved 
   
 ```{r}
-(toJSON(c(3.14, NA, NaN, 21, Inf, -Inf)))
+(toJSON(c(3.14, NA, NaN, 42, Inf, -Inf)))
 ```
   
 - You can choose to represent them as null
@@ -112,7 +120,7 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
   - but loosing information
 
 ```{r}
-(toJSON(c(3.14, NA, NaN, 21, Inf, -Inf), na = "null"))
+(toJSON(c(3.14, NA, NaN, 42, Inf, -Inf), na = "null"))
 
 ```
 
@@ -120,36 +128,40 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 ---
 
-## Changing back and forth
+## Potential Issues: Converting back and forth
 
 - Note that there is no guaranteed one-to-one correspondence of R and JSON objects:
   - it will still be the encoded data
   - but ordering, class, etc. may differ
 
 ```{r}
-(example <- slice_sample(starwars, n = 2))
-fromJSON(toJSON(example))
+(example <- slice_sample(starwars[1:5], n = 2))
+fromJSON(toJSON(example[1:5]))
 ```
-
-if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
-```{r}
-unserializeJSON(serializeJSON(example))
-```
-
-But the downside is that the JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
-
-```{r}
-serializeJSON(example)
-```
-
 
 ---
-# Practice Example
 
-```{r example}
-# Pokedex_JSON
-# Pokedex_df
+## Two more functions from the package:
 
-# some_funny_analysis
+if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
+
+```{r}
+unserializeJSON(serializeJSON(example[1:5]))
 ```
+
+
+
+This allows you to convert back and get the exact same structure back...
+
+---
+
+## Two more functions from the package:
+
+...But it comes with a downside: 
+The JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
+
+```{r}
+serializeJSON(example, pretty = TRUE)
+```
+
 
