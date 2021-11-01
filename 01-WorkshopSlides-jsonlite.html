@@ -146,18 +146,20 @@ class: center, middle, inverse, title-slide
 ```
   [
     {
-      "name": "Mas Amedda",
-      "height": 196,
-      "hair_color": "none",
-      "skin_color": "blue",
-      "eye_color": "blue",
+      "name": "Wedge Antilles",
+      "height": 170,
+      "mass": 77,
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "hazel",
+      "birth_year": 21,
       "sex": "male",
       "gender": "masculine",
-      "homeworld": "Champala",
-      "species": "Chagrian",
-      "films": ["Attack of the Clones", "The Phantom Menace"],
-      "vehicles": [],
-      "starships": []
+      "homeworld": "Corellia",
+      "species": "Human",
+      "films": ["The Empire Strikes Back", "Return of the Jedi", "A New Hope"],
+      "vehicles": ["Snowspeeder"],
+      "starships": ["X-wing"]
     }
   ]
 ```
@@ -206,25 +208,25 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 
 ```r
-&gt; (example &lt;- slice_sample(starwars[1:5], n = 2))
+&gt; (example &lt;- slice_sample(starwars[1:6], n = 2))
 ```
 
 ```
-  # A tibble: 2 x 5
-    name           height  mass hair_color skin_color
-    &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
-  1 Sebulba           112    40 none       grey, red 
-  2 Captain Phasma     NA    NA unknown    unknown
+  # A tibble: 2 x 6
+    name           height  mass hair_color skin_color eye_color
+    &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
+  1 Shmi Skywalker    163    NA black      fair       brown    
+  2 Sly Moore         178    48 none       pale       white
 ```
 
 ```r
-&gt; fromJSON(toJSON(example[1:5]))
+&gt; fromJSON(toJSON(example[1:6]))
 ```
 
 ```
-              name height mass hair_color skin_color
-  1        Sebulba    112   40       none  grey, red
-  2 Captain Phasma     NA   NA    unknown    unknown
+              name height hair_color skin_color eye_color mass
+  1 Shmi Skywalker    163      black       fair     brown   NA
+  2      Sly Moore    178       none       pale     white   48
 ```
 
 ---
@@ -242,8 +244,8 @@ If you - for whatever reason - need it to be consistent, use `(un)serializeJSON`
   # A tibble: 2 x 5
     name           height  mass hair_color skin_color
   * &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
-  1 Sebulba           112    40 none       grey, red 
-  2 Captain Phasma     NA    NA unknown    unknown
+  1 Shmi Skywalker    163    NA black      fair      
+  2 Sly Moore         178    48 none       pale
 ```
 
 &lt;br&gt;
@@ -269,7 +271,7 @@ The JSON structure has to be much harder to read (or transfer to other languages
       "names": {
         "type": "character",
         "attributes": {},
-        "value": ["name", "height", "mass", "hair_color", "skin_color"]
+        "value": ["name", "height", "mass", "hair_color", "skin_color", "eye_color"]
       },
       "row.names": {
         "type": "integer",
@@ -286,27 +288,32 @@ The JSON structure has to be much harder to read (or transfer to other languages
       {
         "type": "character",
         "attributes": {},
-        "value": ["Sebulba", "Captain Phasma"]
+        "value": ["Shmi Skywalker", "Sly Moore"]
       },
       {
         "type": "integer",
         "attributes": {},
-        "value": [112, "NA"]
+        "value": [163, 178]
       },
       {
         "type": "double",
         "attributes": {},
-        "value": [40, "NA"]
+        "value": ["NA", 48]
       },
       {
         "type": "character",
         "attributes": {},
-        "value": ["none", "unknown"]
+        "value": ["black", "none"]
       },
       {
         "type": "character",
         "attributes": {},
-        "value": ["grey, red", "unknown"]
+        "value": ["fair", "pale"]
+      },
+      {
+        "type": "character",
+        "attributes": {},
+        "value": ["brown", "white"]
       }
     ]
   }

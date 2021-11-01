@@ -172,8 +172,8 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
   - but ordering, class, etc. may differ
 
 ```{r}
-(example <- slice_sample(starwars[1:5], n = 2))
-fromJSON(toJSON(example[1:5]))
+(example <- slice_sample(starwars[1:6], n = 2))
+fromJSON(toJSON(example[1:6]))
 ```
 
 ---
