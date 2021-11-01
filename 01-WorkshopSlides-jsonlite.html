@@ -21,19 +21,26 @@ class: center, middle, inverse, title-slide
 
 
 
-# Intro
+## What is JSON?
+- JavaScript Object Notation: Is a standard open file format and data interchange format that uses human readable text to store and transmit data objects.
+- It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
 
-## 1st slide
-- What is JSON?
 
-- History of the package
+## History of the package
+- Douglas Crockford originally specified the JSON format in the early 2000's
+- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
+- It was eventually sold to Sun Microsystems, Amazon, EDS. The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
+- Fun fact: Crockford added a clause in the JSON license stating that "The software shall we used for Good and not evil" in order to open source it and mock corporate lawyers. 
 
 ---
-#Intro
-## 2nd slide
-- Benefits of using JSON
+## Benefits of using JSON
+- JSON is the superior version of XML
+- It has easy syntax
+- It's supported across many browsers so it is compatible with many browsers
+Most importantly for us: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
 
 - Where is it used?
+- It is mostly used in web API's and for web development 
 
 ---
 # Data Structures in JSON
@@ -109,13 +116,13 @@ class: center, middle, inverse, title-slide
 ```
   [
     {
-      "name": "Rey",
-      "hair_color": "brown",
-      "skin_color": "light",
-      "eye_color": "hazel",
-      "sex": "female",
-      "gender": "feminine",
-      "species": "Human",
+      "name": "BB8",
+      "hair_color": "none",
+      "skin_color": "none",
+      "eye_color": "black",
+      "sex": "none",
+      "gender": "masculine",
+      "species": "Droid",
       "films": ["The Force Awakens"],
       "vehicles": [],
       "starships": []
@@ -172,10 +179,10 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 ```
   # A tibble: 2 x 5
-    name       height  mass hair_color skin_color
-    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
-  1 Mas Amedda    196    NA none       blue      
-  2 Mace Windu    188    84 none       dark
+    name       height  mass hair_color skin_color      
+    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           
+  1 Adi Gallia    184    50 none       dark            
+  2 Shaak Ti      178    57 none       red, blue, white
 ```
 
 ```r
@@ -183,9 +190,9 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 ```
 
 ```
-          name height hair_color skin_color mass
-  1 Mas Amedda    196       none       blue   NA
-  2 Mace Windu    188       none       dark   84
+          name height mass hair_color       skin_color
+  1 Adi Gallia    184   50       none             dark
+  2   Shaak Ti    178   57       none red, blue, white
 ```
 
 ---
@@ -201,10 +208,10 @@ if you - for whatever reason - need it to be consistent, use `(un)serializeJSON`
 
 ```
   # A tibble: 2 x 5
-    name       height  mass hair_color skin_color
-  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
-  1 Mas Amedda    196    NA none       blue      
-  2 Mace Windu    188    84 none       dark
+    name       height  mass hair_color skin_color      
+  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           
+  1 Adi Gallia    184    50 none       dark            
+  2 Shaak Ti      178    57 none       red, blue, white
 ```
 
 
@@ -247,17 +254,17 @@ The JSON structure has to be much harder to read (or transfer to other languages
       {
         "type": "character",
         "attributes": {},
-        "value": ["Mas Amedda", "Mace Windu"]
+        "value": ["Adi Gallia", "Shaak Ti"]
       },
       {
         "type": "integer",
         "attributes": {},
-        "value": [196, 188]
+        "value": [184, 178]
       },
       {
         "type": "double",
         "attributes": {},
-        "value": ["NA", 84]
+        "value": [50, 57]
       },
       {
         "type": "character",
@@ -267,7 +274,7 @@ The JSON structure has to be much harder to read (or transfer to other languages
       {
         "type": "character",
         "attributes": {},
-        "value": ["blue", "dark"]
+        "value": ["dark", "red, blue, white"]
       }
     ]
   }
