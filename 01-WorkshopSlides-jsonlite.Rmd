@@ -36,7 +36,7 @@ p_load(xaringan, jsonlite, tidyverse)
   - It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
 
 ## Benefits of using JSON
-- JSON is the superior version of XML
+- JSON is a "fat-free alternative" to XML
 - It has easy syntax
 - It is mostly used in web API's and for web development 
 - It's supported across operating systems, browsers, and programming languages
@@ -45,9 +45,9 @@ p_load(xaringan, jsonlite, tidyverse)
 
 ---
 
-## History of the package
+## History of JSON
 .pull-left[
-- Douglas Crockford originally specified the JSON format in the early 2000's
+- Douglas Crockford originally specified the JSON format in the early 2000's.
 - He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
 - It was eventually sold to Sun Microsystems, Amazon, EDS. 
 - The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
@@ -56,6 +56,21 @@ p_load(xaringan, jsonlite, tidyverse)
 
 .pull-right[
 <img src="https://lh5.googleusercontent.com/-UOw5RFBcFOE/UPGNH4Ocr4I/AAAAAAAADRY/ZUDjJZBQqyI/s400/crockford.jpg" height=440>
+]
+
+---
+
+# History of the jsonlite package
+.pull-left[
+- developed in 2014 by Jeroen Ooms, a research engineer at Berkeley Institute for Data Science
+
+- aims to realize practical and consistent mapping between JSON data and R objects
+- superseded `rjson` and `RJSONIO`, which led to inconsistent results in some instances
+- was soon widely adopted across the data science community
+]
+
+.pull-right[
+<img src="https://yt3.ggpht.com/a/AATXAJyowD0Z1SHP7Bq2Jbqi_m0H9G9a9O0MZKdY3g=s900-c-k-c0xffffffff-no-rj-mo" height=440>
 ]
 
 
@@ -101,7 +116,7 @@ p_load(xaringan, jsonlite, tidyverse)
 
 ```{r fromJSONarray}
 JSON_array <- '[1, true, null, "string"]'
-fromJSON(JSON_array)
+fromJSON(JSON_array, simplifyVector = TRUE)
 ```
 
 
@@ -111,7 +126,7 @@ JSON_object <-
 {"key": "value", "one": 1, "any_questions?": false},
 {"key": null, "one": "NA", "any_questions?": true}
 ]'
-fromJSON(JSON_object)
+fromJSON(JSON_object, simplifyDataFrame = TRUE)
 ```
 
 ---
