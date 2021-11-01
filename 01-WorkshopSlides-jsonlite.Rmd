@@ -30,42 +30,53 @@ p_load(xaringan, jsonlite, tidyverse)
 ```
 
 ## What is JSON?
-- JavaScript Object Notation: Is a standard open file format and data interchange format that uses human readable text to store and transmit data objects.
-- It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
+- **JavaScript Object Notation**: 
+  - Is a standard open file and data interchange format 
+  - uses human readable text to store and transmit data objects.
+  - It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
 
-
-## History of the package
-- Douglas Crockford originally specified the JSON format in the early 2000's
-- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
-- It was eventually sold to Sun Microsystems, Amazon, EDS. The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
-- Fun fact: Crockford added a clause in the JSON license stating that "The software shall we used for Good and not evil" in order to open source it and mock corporate lawyers. 
-
----
 ## Benefits of using JSON
 - JSON is the superior version of XML
 - It has easy syntax
-- It's supported across many browsers so it is compatible with many browsers
-Most importantly for us: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
-
-- Where is it used?
 - It is mostly used in web API's and for web development 
+- It's supported across operating systems, browsers, and programming languages
+
+- **Most importantly for us**: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
+
+---
+
+## History of the package
+.pull-left[
+- Douglas Crockford originally specified the JSON format in the early 2000's
+- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
+- It was eventually sold to Sun Microsystems, Amazon, EDS. 
+- The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
+- Fun fact: Crockford added a clause in the JSON license stating that "The software shall be used for Good and not evil" in order to keep it open source and mock corporate lawyers.
+]
+
+.pull-right[
+<img src="https://lh5.googleusercontent.com/-UOw5RFBcFOE/UPGNH4Ocr4I/AAAAAAAADRY/ZUDjJZBQqyI/s400/crockford.jpg" height=440>
+]
+
 
 ---
 # Data Structures in JSON
 
-- object
+<br>
+
+- **Object**
   - unordered list of key : value pairs
   - similar to a dictionary
   - can include all types of JSON structures
   
   
-- array
+- **Array**
   - ordered sequence of values
   - similar to R's vector-class
   - datatype can be heterogeneous
 
 
-- value
+- **Value**
   - no direct representation in R
   - one-element values are similar to vectors of length 1
   - but they can also consist of multiple elements
@@ -75,10 +86,14 @@ Most importantly for us: JSON is a great tool for sharing data of any size, even
 <img src="https://www.json.org/img/object.png" height=440>
 ---
 # array
-<img src="https://www.json.org/img/array.png" heght=440>
+
+<br>
+<br>
+
+<img src="https://www.json.org/img/array.png" height=220>
 ---
 # value
-<img src="https://www.json.org/img/value.png" heght=440>
+<img src="https://www.json.org/img/value.png" height=440>
 
 ---
 
@@ -150,12 +165,13 @@ fromJSON(toJSON(example[1:5]))
 
 ## Two more functions from the package:
 
-if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
+If you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
 
 ```{r}
 unserializeJSON(serializeJSON(example[1:5]))
 ```
 
+<br>
 
 
 This allows you to convert back and get the exact same structure back...
@@ -163,7 +179,6 @@ This allows you to convert back and get the exact same structure back...
 ---
 
 ## Two more functions from the package:
-
 ...But it comes with a downside: 
 The JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
 
@@ -171,4 +186,24 @@ The JSON structure has to be much harder to read (or transfer to other languages
 serializeJSON(example, pretty = TRUE)
 ```
 
+---
 
+<br>
+<center> 
+
+<b>You find more details, exercises, and sources in our practice materials 
+</b>
+
+<br>
+
+<p>
+
+<img src="http://www.quickmeme.com/img/c4/c4083d836ddff66aadf770fddf6c865feb6c9c6db293f2ade3da3a0e5f2cf675.jpg" height=440>
+</center>
+<br>
+
+<center>
+
+<b>See you in our workshop! 
+</b>
+</center>

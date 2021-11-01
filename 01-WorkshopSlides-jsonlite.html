@@ -22,42 +22,53 @@ class: center, middle, inverse, title-slide
 
 
 ## What is JSON?
-- JavaScript Object Notation: Is a standard open file format and data interchange format that uses human readable text to store and transmit data objects.
-- It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
+- **JavaScript Object Notation**: 
+  - Is a standard open file and data interchange format 
+  - uses human readable text to store and transmit data objects.
+  - It is a common data format with diverse uses particularly in electronic data interchange like web applications with servers
 
-
-## History of the package
-- Douglas Crockford originally specified the JSON format in the early 2000's
-- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
-- It was eventually sold to Sun Microsystems, Amazon, EDS. The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
-- Fun fact: Crockford added a clause in the JSON license stating that "The software shall we used for Good and not evil" in order to open source it and mock corporate lawyers. 
-
----
 ## Benefits of using JSON
 - JSON is the superior version of XML
 - It has easy syntax
-- It's supported across many browsers so it is compatible with many browsers
-Most importantly for us: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
-
-- Where is it used?
 - It is mostly used in web API's and for web development 
+- It's supported across operating systems, browsers, and programming languages
+
+- **Most importantly for us**: JSON is a great tool for sharing data of any size, even audio or videos as it stores the data in arrays
+
+---
+
+## History of the package
+.pull-left[
+- Douglas Crockford originally specified the JSON format in the early 2000's
+- He popularized it with Chip Morningstar and with State Software who helped in the early stages of the development 
+- It was eventually sold to Sun Microsystems, Amazon, EDS. 
+- The JSON.org site went live in 2002 and Yahoo started offering some of their web services in JSON
+- Fun fact: Crockford added a clause in the JSON license stating that "The software shall be used for Good and not evil" in order to keep it open source and mock corporate lawyers.
+]
+
+.pull-right[
+&lt;img src="https://lh5.googleusercontent.com/-UOw5RFBcFOE/UPGNH4Ocr4I/AAAAAAAADRY/ZUDjJZBQqyI/s400/crockford.jpg" height=440&gt;
+]
+
 
 ---
 # Data Structures in JSON
 
-- object
+&lt;br&gt;
+
+- **Object**
   - unordered list of key : value pairs
   - similar to a dictionary
   - can include all types of JSON structures
   
   
-- array
+- **Array**
   - ordered sequence of values
   - similar to R's vector-class
   - datatype can be heterogeneous
 
 
-- value
+- **Value**
   - no direct representation in R
   - one-element values are similar to vectors of length 1
   - but they can also consist of multiple elements
@@ -67,10 +78,14 @@ Most importantly for us: JSON is a great tool for sharing data of any size, even
 &lt;img src="https://www.json.org/img/object.png" height=440&gt;
 ---
 # array
-&lt;img src="https://www.json.org/img/array.png" heght=440&gt;
+
+&lt;br&gt;
+&lt;br&gt;
+
+&lt;img src="https://www.json.org/img/array.png" height=220&gt;
 ---
 # value
-&lt;img src="https://www.json.org/img/value.png" heght=440&gt;
+&lt;img src="https://www.json.org/img/value.png" height=440&gt;
 
 ---
 
@@ -116,14 +131,17 @@ Most importantly for us: JSON is a great tool for sharing data of any size, even
 ```
   [
     {
-      "name": "BB8",
-      "hair_color": "none",
-      "skin_color": "none",
-      "eye_color": "black",
-      "sex": "none",
+      "name": "Raymus Antilles",
+      "height": 188,
+      "mass": 79,
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "sex": "male",
       "gender": "masculine",
-      "species": "Droid",
-      "films": ["The Force Awakens"],
+      "homeworld": "Alderaan",
+      "species": "Human",
+      "films": ["Revenge of the Sith", "A New Hope"],
       "vehicles": [],
       "starships": []
     }
@@ -179,10 +197,10 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 
 ```
   # A tibble: 2 x 5
-    name       height  mass hair_color skin_color      
-    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           
-  1 Adi Gallia    184    50 none       dark            
-  2 Shaak Ti      178    57 none       red, blue, white
+    name           height  mass hair_color skin_color
+    &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+  1 Darth Vader       202   136 none       white     
+  2 Shmi Skywalker    163    NA black      fair
 ```
 
 ```r
@@ -190,16 +208,16 @@ R knows different `NA`-values, but JSON only has `null` to represent those...
 ```
 
 ```
-          name height mass hair_color       skin_color
-  1 Adi Gallia    184   50       none             dark
-  2   Shaak Ti    178   57       none red, blue, white
+              name height mass hair_color skin_color
+  1    Darth Vader    202  136       none      white
+  2 Shmi Skywalker    163   NA      black       fair
 ```
 
 ---
 
 ## Two more functions from the package:
 
-if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
+If you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
 
 
 ```r
@@ -208,12 +226,13 @@ if you - for whatever reason - need it to be consistent, use `(un)serializeJSON`
 
 ```
   # A tibble: 2 x 5
-    name       height  mass hair_color skin_color      
-  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           
-  1 Adi Gallia    184    50 none       dark            
-  2 Shaak Ti      178    57 none       red, blue, white
+    name           height  mass hair_color skin_color
+  * &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+  1 Darth Vader       202   136 none       white     
+  2 Shmi Skywalker    163    NA black      fair
 ```
 
+&lt;br&gt;
 
 
 This allows you to convert back and get the exact same structure back...
@@ -221,7 +240,6 @@ This allows you to convert back and get the exact same structure back...
 ---
 
 ## Two more functions from the package:
-
 ...But it comes with a downside: 
 The JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
 
@@ -254,33 +272,53 @@ The JSON structure has to be much harder to read (or transfer to other languages
       {
         "type": "character",
         "attributes": {},
-        "value": ["Adi Gallia", "Shaak Ti"]
+        "value": ["Darth Vader", "Shmi Skywalker"]
       },
       {
         "type": "integer",
         "attributes": {},
-        "value": [184, 178]
+        "value": [202, 163]
       },
       {
         "type": "double",
         "attributes": {},
-        "value": [50, 57]
+        "value": [136, "NA"]
       },
       {
         "type": "character",
         "attributes": {},
-        "value": ["none", "none"]
+        "value": ["none", "black"]
       },
       {
         "type": "character",
         "attributes": {},
-        "value": ["dark", "red, blue, white"]
+        "value": ["white", "fair"]
       }
     ]
   }
 ```
 
+---
 
+&lt;br&gt;
+&lt;center&gt; 
+
+&lt;b&gt;You find more details, exercises, and sources in our practice materials 
+&lt;/b&gt;
+
+&lt;br&gt;
+
+&lt;p&gt;
+
+&lt;img src="http://www.quickmeme.com/img/c4/c4083d836ddff66aadf770fddf6c865feb6c9c6db293f2ade3da3a0e5f2cf675.jpg" height=440&gt;
+&lt;/center&gt;
+&lt;br&gt;
+
+&lt;center&gt;
+
+&lt;b&gt;See you in our workshop! 
+&lt;/b&gt;
+&lt;/center&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

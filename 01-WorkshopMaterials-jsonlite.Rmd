@@ -134,7 +134,10 @@ nested_object <-
 "array": [1,2],
 "array": [99,98],
 "matrix": [[1,2],[3,4]],
-"list": {"first": 42, "second": 3.141593, "last": "MMXXI", "addition": {"another list": ["a", "b", "C"]}}
+"list": {"first": 42, 
+         "second": 3.141593, 
+         "last": "MMXXI", "addition": 
+        {"another list": ["a", "b", "C"]}}
 },
 {
 "something": [99,-10],
@@ -155,7 +158,6 @@ nested_df$matrix
 nested_df$list
 
 jsonlite::flatten(nested_df)
-jsonlite::
 ```
 
 
