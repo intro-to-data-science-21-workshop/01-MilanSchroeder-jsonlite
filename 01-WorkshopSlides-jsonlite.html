@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 
 # Intro
 
-# 1st slide
+## 1st slide
 - What is JSON?
 
 - History of the package
@@ -36,13 +36,25 @@ class: center, middle, inverse, title-slide
 - Where is it used?
 
 ---
-# Structure of JSON objects
+# Data Structures in JSON
 
-- object (think: list in R)
-
+- object
+  - unordered list of key : value pairs
+  - similar to a dictionary
+  - can include all types of JSON structures
+  
+  
 - array
+  - ordered sequence of values
+  - similar to R's vector-class
+  - datatype can be heterogeneous
+
 
 - value
+  - no direct representation in R
+  - some are similar to vector of length 1
+  - values can be nested
+
 ---
 # object
 &lt;img src="https://www.json.org/img/object.png" height=440&gt;
@@ -55,1415 +67,200 @@ class: center, middle, inverse, title-slide
 
 ---
 
-# Key functions:
-
-.pull-left[
-## fromJSON
+# Key functions: `fromJSON`
 
 
 ```r
-# fromJSON(todays_instructors, simplify = T, nullValue = F)
-
-workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
-
-workshops %&gt;% select(name, description, updated_at)
+&gt; workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
+&gt; 
+&gt; workshops %&gt;% 
++   filter(!is.na(description)) %&gt;% 
++   select(description)
 ```
 
 ```
-TRUE                                                  name
-TRUE 1                              workshop-presentations
-TRUE 2                  06-KaiFoerster-string_manipulation
-TRUE 3                  13-stevenkerr-interactive_graphics
-TRUE 4                 01-GabrieldaSilvaZech-JSON-jsonlite
-TRUE 5                          15-LisaPramann-CSR-with-sf
-TRUE 6                        14-FedericoMammana-Quanteda-
-TRUE 7                       00-simonmunzert-template-repo
-TRUE 8         intro-to-data-science-21-workshop.github.io
-TRUE 9                          14-LauraMenicacci-quanteda
-TRUE 10            07-EduardoCampbell-DataCleaning-Janitor
-TRUE 11                      15-HannahSchweren-CRS-with-sf
-TRUE 12                         10-EstebanGracia-Lubridate
-TRUE 13                             05-AngelaDuarte-RegExp
-TRUE 14                04-HelenaBakic-CreatingAPIs-plumber
-TRUE 15          16-JohannesHalkenhaeusser-GeocodingwithSF
-TRUE 16                  05-LukasWarode-Regex_with_stringr
-TRUE 17            16-FernandaCandidoGomes-GeocodingwithSF
-TRUE 18                     11_JohannaMehler-NetworkGraphs
-TRUE 19        09-MaAdelleGiaArbo-DataWrangling-data.table
-TRUE 20 03-ReedGarvin-Dynamic_web_scraping-_with_RSelenium
-TRUE 21     08-VictorMoeslein-categoricalvariables-forcats
-TRUE 22      17-KabirSandrolini-Temporal-data-with-tsibble
-TRUE 23                          12-FlorianWinkler-Leaflet
-TRUE 24                         01-MilanSchroeder-jsonlite
-TRUE                                                                                                                                                                                                                                                                                                                                      description
-TRUE 1                                                                                                                                                                                                                                                                                                                                           &lt;NA&gt;
-TRUE 2                                                                                                                                                                                                                                                                                                                                           &lt;NA&gt;
-TRUE 3                                                                                                                                                                                                                                                                                                 How to create interactive graphics with plotly
-TRUE 4                                                                                                                                                                                                                                                                                                                                           &lt;NA&gt;
-TRUE 5                                                                                  This repository provides materials for a session that is part of the IDS Tools for Data Science workshop run at the Hertie School Berlin in November 2021. This workshop-session you new insights into working with Coordinate Reference Systems (CRS) in R. 
-TRUE 6                                                                                                                                                                                                                                                                                                                                           &lt;NA&gt;
-TRUE 7                                                                                                                                                                                                                                                                                                         A template repository for the workshop
-TRUE 8                                                                                                                                                                                                                                                                                               Frontend of I2DS Tools for Data Science Workshop
-TRUE 9                                                                                                                                                                                                                                                                                                                                           &lt;NA&gt;
-TRUE 10                                                                                                                                                                                                                 Together with my classmate Claudia Zwar, we will introduce you to the package Janitor and its functions to clean dirty data. 
-TRUE 11                                                                                                                                                                                                                                                                                                                                          &lt;NA&gt;
-TRUE 12 This short student-run workshop is part of the course I2DS Tools for Data Science workshop at the Hertie School, Berlin taught by Simon Munzert at the Hertie School, Berlin, Fall-Semester 2021. It is taking place in November 2021. This particular workshop will teach how to work with dates and times using the Lubridate package in R.
-TRUE 13                                                                                                                                                                                                                                                                                                                                          &lt;NA&gt;
-TRUE 14                                                                                                                                                                                                                                                                               Inroduction to creating web APIs in R using the plumber package
-TRUE 15                                                                                                                                                                                                                                                                                                                                          &lt;NA&gt;
-TRUE 16                                                                                                                                                                                                                                                           Regular expressions with stringr – A workshop from Anna-Lisa Wirth and Lukas Warode
-TRUE 17                                                                                                            This repository, organized by Andrew Wells and Fernanda Candido Gomes, provides materials for the session "Geocoding with SF", part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2021.
-TRUE 18                                                                                                                                                                                                                                                                               This workshop covers network graphs using ggraph and tidygraph.
-TRUE 19                                                                                                                                                                                                                                                                                                                                          &lt;NA&gt;
-TRUE 20                                                                                                                                                                                                                                                                                                                                          &lt;NA&gt;
-TRUE 21                                                                                                                                                                                                                                                                                Intro to working with categorical variables in R using forcats
-TRUE 22                                                                                                                                                                                                     Workshop presentation on analyzing temporal data with Tsibble, by Kabir Sandrolini &amp; Maren Rieker, students at the Hertie School, Berlin.
-TRUE 23                                                                                                                                                                                                This repository provides materials for a workshop presentation on "Interactive maps with leaflet" presented by Florian Winkler and Jiayu Yang.
-TRUE 24                                                                                                                                                                                                                                                            Join our Workshop on jsonlite: A Simple and Robust JSON Parser and Generator for R
-TRUE              updated_at
-TRUE 1  2021-10-06T20:45:55Z
-TRUE 2  2021-10-27T06:16:36Z
-TRUE 3  2021-10-27T08:31:47Z
-TRUE 4  2021-10-25T20:41:28Z
-TRUE 5  2021-10-26T14:49:42Z
-TRUE 6  2021-10-26T18:24:16Z
-TRUE 7  2021-10-14T15:47:15Z
-TRUE 8  2021-10-14T15:56:45Z
-TRUE 9  2021-10-27T06:49:06Z
-TRUE 10 2021-10-20T15:07:49Z
-TRUE 11 2021-10-20T12:20:25Z
-TRUE 12 2021-10-25T09:57:34Z
-TRUE 13 2021-10-27T09:02:14Z
-TRUE 14 2021-10-26T21:24:01Z
-TRUE 15 2021-10-27T06:19:47Z
-TRUE 16 2021-10-21T14:36:01Z
-TRUE 17 2021-10-26T21:43:48Z
-TRUE 18 2021-10-26T15:12:58Z
-TRUE 19 2021-10-26T22:46:05Z
-TRUE 20 2021-10-25T15:09:36Z
-TRUE 21 2021-10-25T23:46:50Z
-TRUE 22 2021-10-26T15:37:12Z
-TRUE 23 2021-10-27T08:54:19Z
-TRUE 24 2021-10-27T09:24:40Z
+                                                                                                                                                                                                                                                                                                                                       description
+  1                                                                                                                                                                                                                                                                                                 How to create interactive graphics with plotly
+  2                                                                                  This repository provides materials for a session that is part of the IDS Tools for Data Science workshop run at the Hertie School Berlin in November 2021. This workshop-session you new insights into working with Coordinate Reference Systems (CRS) in R. 
+  3                                                                                                                                                                                                                                                                                                         A template repository for the workshop
+  4                                                                                                                                                                                                                                                                                               Frontend of I2DS Tools for Data Science Workshop
+  5                                                                               This repository introduces you to the basics of the quanteda package, presented by Laura Menicacci and Dinah Rabe in the context of the Introduction for Data Science workshop, organised by Prof. Simon Munzert at the Hertie School (Berlin) in November 2021.
+  6                                                                                                                                                                                                                  Together with my classmate Claudia Zwar, we will introduce you to the package Janitor and its functions to clean dirty data. 
+  7  This short student-run workshop is part of the course I2DS Tools for Data Science workshop at the Hertie School, Berlin taught by Simon Munzert at the Hertie School, Berlin, Fall-Semester 2021. It is taking place in November 2021. This particular workshop will teach how to work with dates and times using the Lubridate package in R.
+  8                                                                                                                                            This repository provides materials for the session on Regular Expressions with Stringr that is part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2021. 
+  9                                                                                                                                                                                                                                                                                Inroduction to creating web APIs in R using the plumber package
+  10                                                                                                                                                                                                                                                           Regular expressions with stringr – A workshop from Anna-Lisa Wirth and Lukas Warode
+  11                                                                                                            This repository, organized by Andrew Wells and Fernanda Candido Gomes, provides materials for the session "Geocoding with SF", part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2021.
+  12                                                                                                                                                                                                                                                                               This workshop covers network graphs using ggraph and tidygraph.
+  13                                                                                                                                                                                                                                           Intro to working with categorical variables in R using forcats by Janine De Vera and Victor Möslein
+  14                                                                                                                                                                                                     Workshop presentation on analyzing temporal data with Tsibble, by Kabir Sandrolini &amp; Maren Rieker, students at the Hertie School, Berlin.
+  15                                                                                                                                                                                                This repository provides materials for a workshop presentation on "Interactive maps with leaflet" presented by Florian Winkler and Jiayu Yang.
+  16                                                                                                                                                                                                                                                            Join our Workshop on jsonlite: A Simple and Robust JSON Parser and Generator for R
+  17                                                                                                                                                                                                                                                                                                                   Sofia Lai &amp; Marina Luna MPP
+  18                                                                                                                                                                                                                                                                 Learn how to incorporate data from Web APIs into your data science workflow! 
+  19                                                                                                                                                          This repository, by Caroline Cavallari and Jose de Los Heros, provides materials for learning how to connect to Web APIs, which will be presented as a workshop at the Hertie School
+  20                                                                                                                                                                                                                      Through this presentation, Elena and I will introduce you to stringr package and some cool string manipulation exercises
 ```
 
 ```r
-# They all sound super interesting, make sure to check them out!
+&gt; # Make sure to check out the other workshops, too!
 ```
 
-]
+---
 
-.pull-right[
-## toJSON
+# Key functions: `toJSON`
 
 
 ```r
-# toJSON(todays_instructors, pretty = T)
-toJSON(starwars, pretty = T)
+&gt; starwars %&gt;% slice_sample(n = 2) %&gt;% 
++   toJSON(pretty = T)
 ```
 
 ```
-TRUE [
-TRUE   {
-TRUE     "name": "Luke Skywalker",
-TRUE     "height": 172,
-TRUE     "mass": 77,
-TRUE     "hair_color": "blond",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 19,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Revenge of the Sith", "Return of the Jedi", "A New Hope", "The Force Awakens"],
-TRUE     "vehicles": ["Snowspeeder", "Imperial Speeder Bike"],
-TRUE     "starships": ["X-wing", "Imperial shuttle"]
-TRUE   },
-TRUE   {
-TRUE     "name": "C-3PO",
-TRUE     "height": 167,
-TRUE     "mass": 75,
-TRUE     "skin_color": "gold",
-TRUE     "eye_color": "yellow",
-TRUE     "birth_year": 112,
-TRUE     "sex": "none",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Droid",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "R2-D2",
-TRUE     "height": 96,
-TRUE     "mass": 32,
-TRUE     "skin_color": "white, blue",
-TRUE     "eye_color": "red",
-TRUE     "birth_year": 33,
-TRUE     "sex": "none",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Droid",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi", "A New Hope", "The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Darth Vader",
-TRUE     "height": 202,
-TRUE     "mass": 136,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "white",
-TRUE     "eye_color": "yellow",
-TRUE     "birth_year": 41.9,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Revenge of the Sith", "Return of the Jedi", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["TIE Advanced x1"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Leia Organa",
-TRUE     "height": 150,
-TRUE     "mass": 49,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 19,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Alderaan",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Revenge of the Sith", "Return of the Jedi", "A New Hope", "The Force Awakens"],
-TRUE     "vehicles": ["Imperial Speeder Bike"],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Owen Lars",
-TRUE     "height": 178,
-TRUE     "mass": 120,
-TRUE     "hair_color": "brown, grey",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 52,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Beru Whitesun lars",
-TRUE     "height": 165,
-TRUE     "mass": 75,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 47,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "R5-D4",
-TRUE     "height": 97,
-TRUE     "mass": 32,
-TRUE     "skin_color": "white, red",
-TRUE     "eye_color": "red",
-TRUE     "sex": "none",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Droid",
-TRUE     "films": ["A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Biggs Darklighter",
-TRUE     "height": 183,
-TRUE     "mass": 84,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 24,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["X-wing"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Obi-Wan Kenobi",
-TRUE     "height": 182,
-TRUE     "mass": 77,
-TRUE     "hair_color": "auburn, white",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue-gray",
-TRUE     "birth_year": 57,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Stewjon",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi", "A New Hope"],
-TRUE     "vehicles": ["Tribubble bongo"],
-TRUE     "starships": ["Jedi starfighter", "Trade Federation cruiser", "Naboo star skiff", "Jedi Interceptor", "Belbullab-22 starfighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Anakin Skywalker",
-TRUE     "height": 188,
-TRUE     "mass": 84,
-TRUE     "hair_color": "blond",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 41.9,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": ["Zephyr-G swoop bike", "XJ-6 airspeeder"],
-TRUE     "starships": ["Trade Federation cruiser", "Jedi Interceptor", "Naboo fighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Wilhuff Tarkin",
-TRUE     "height": 180,
-TRUE     "hair_color": "auburn, grey",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 64,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Eriadu",
-TRUE     "species": "Human",
-TRUE     "films": ["Revenge of the Sith", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Chewbacca",
-TRUE     "height": 228,
-TRUE     "mass": 112,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "unknown",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 200,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Kashyyyk",
-TRUE     "species": "Wookiee",
-TRUE     "films": ["The Empire Strikes Back", "Revenge of the Sith", "Return of the Jedi", "A New Hope", "The Force Awakens"],
-TRUE     "vehicles": ["AT-ST"],
-TRUE     "starships": ["Millennium Falcon", "Imperial shuttle"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Han Solo",
-TRUE     "height": 180,
-TRUE     "mass": 80,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 29,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Corellia",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Return of the Jedi", "A New Hope", "The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Millennium Falcon", "Imperial shuttle"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Greedo",
-TRUE     "height": 173,
-TRUE     "mass": 74,
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "black",
-TRUE     "birth_year": 44,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Rodia",
-TRUE     "species": "Rodian",
-TRUE     "films": ["A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Jabba Desilijic Tiure",
-TRUE     "height": 175,
-TRUE     "mass": 1358,
-TRUE     "skin_color": "green-tan, brown",
-TRUE     "eye_color": "orange",
-TRUE     "birth_year": 600,
-TRUE     "sex": "hermaphroditic",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Nal Hutta",
-TRUE     "species": "Hutt",
-TRUE     "films": ["The Phantom Menace", "Return of the Jedi", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Wedge Antilles",
-TRUE     "height": 170,
-TRUE     "mass": 77,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "hazel",
-TRUE     "birth_year": 21,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Corellia",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Return of the Jedi", "A New Hope"],
-TRUE     "vehicles": ["Snowspeeder"],
-TRUE     "starships": ["X-wing"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Jek Tono Porkins",
-TRUE     "height": 180,
-TRUE     "mass": 110,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Bestine IV",
-TRUE     "species": "Human",
-TRUE     "films": ["A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["X-wing"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Yoda",
-TRUE     "height": 66,
-TRUE     "mass": 17,
-TRUE     "hair_color": "white",
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 896,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "species": "Yoda's species",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Palpatine",
-TRUE     "height": 170,
-TRUE     "mass": 75,
-TRUE     "hair_color": "grey",
-TRUE     "skin_color": "pale",
-TRUE     "eye_color": "yellow",
-TRUE     "birth_year": 82,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Boba Fett",
-TRUE     "height": 183,
-TRUE     "mass": 78.2,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 31.5,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Kamino",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Attack of the Clones", "Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Slave 1"]
-TRUE   },
-TRUE   {
-TRUE     "name": "IG-88",
-TRUE     "height": 200,
-TRUE     "mass": 140,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "metal",
-TRUE     "eye_color": "red",
-TRUE     "birth_year": 15,
-TRUE     "sex": "none",
-TRUE     "gender": "masculine",
-TRUE     "species": "Droid",
-TRUE     "films": ["The Empire Strikes Back"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Bossk",
-TRUE     "height": 190,
-TRUE     "mass": 113,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "red",
-TRUE     "birth_year": 53,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Trandosha",
-TRUE     "species": "Trandoshan",
-TRUE     "films": ["The Empire Strikes Back"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Lando Calrissian",
-TRUE     "height": 177,
-TRUE     "mass": 79,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 31,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Socorro",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back", "Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Millennium Falcon"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Lobot",
-TRUE     "height": 175,
-TRUE     "mass": 79,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 37,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Bespin",
-TRUE     "species": "Human",
-TRUE     "films": ["The Empire Strikes Back"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ackbar",
-TRUE     "height": 180,
-TRUE     "mass": 83,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "brown mottle",
-TRUE     "eye_color": "orange",
-TRUE     "birth_year": 41,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Mon Cala",
-TRUE     "species": "Mon Calamari",
-TRUE     "films": ["Return of the Jedi", "The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Mon Mothma",
-TRUE     "height": 150,
-TRUE     "hair_color": "auburn",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 48,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Chandrila",
-TRUE     "species": "Human",
-TRUE     "films": ["Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Arvel Crynyd",
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "species": "Human",
-TRUE     "films": ["Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["A-wing"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Wicket Systri Warrick",
-TRUE     "height": 88,
-TRUE     "mass": 20,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "brown",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 8,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Endor",
-TRUE     "species": "Ewok",
-TRUE     "films": ["Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Nien Nunb",
-TRUE     "height": 160,
-TRUE     "mass": 68,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "black",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Sullust",
-TRUE     "species": "Sullustan",
-TRUE     "films": ["Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Millennium Falcon"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Qui-Gon Jinn",
-TRUE     "height": 193,
-TRUE     "mass": 89,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 92,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": ["Tribubble bongo"],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Nute Gunray",
-TRUE     "height": 191,
-TRUE     "mass": 90,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "mottled green",
-TRUE     "eye_color": "red",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Cato Neimoidia",
-TRUE     "species": "Neimodian",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Finis Valorum",
-TRUE     "height": 170,
-TRUE     "hair_color": "blond",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 91,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Coruscant",
-TRUE     "species": "Human",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Jar Jar Binks",
-TRUE     "height": 196,
-TRUE     "mass": 66,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "orange",
-TRUE     "eye_color": "orange",
-TRUE     "birth_year": 52,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Gungan",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Roos Tarpals",
-TRUE     "height": 224,
-TRUE     "mass": 82,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "orange",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Gungan",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Rugor Nass",
-TRUE     "height": 206,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "orange",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Gungan",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ric Olié",
-TRUE     "height": 183,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "homeworld": "Naboo",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Naboo Royal Starship"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Watto",
-TRUE     "height": 137,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "blue, grey",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Toydaria",
-TRUE     "species": "Toydarian",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Sebulba",
-TRUE     "height": 112,
-TRUE     "mass": 40,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey, red",
-TRUE     "eye_color": "orange",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Malastare",
-TRUE     "species": "Dug",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Quarsh Panaka",
-TRUE     "height": 183,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 62,
-TRUE     "homeworld": "Naboo",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Shmi Skywalker",
-TRUE     "height": 163,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 72,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Darth Maul",
-TRUE     "height": 175,
-TRUE     "mass": 80,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "red",
-TRUE     "eye_color": "yellow",
-TRUE     "birth_year": 54,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Dathomir",
-TRUE     "species": "Zabrak",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": ["Sith speeder"],
-TRUE     "starships": ["Scimitar"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Bib Fortuna",
-TRUE     "height": 180,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "pale",
-TRUE     "eye_color": "pink",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Ryloth",
-TRUE     "species": "Twi'lek",
-TRUE     "films": ["Return of the Jedi"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ayla Secura",
-TRUE     "height": 178,
-TRUE     "mass": 55,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "blue",
-TRUE     "eye_color": "hazel",
-TRUE     "birth_year": 48,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Ryloth",
-TRUE     "species": "Twi'lek",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Dud Bolt",
-TRUE     "height": 94,
-TRUE     "mass": 45,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "blue, grey",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Vulpter",
-TRUE     "species": "Vulptereen",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Gasgano",
-TRUE     "height": 122,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "white, blue",
-TRUE     "eye_color": "black",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Troiken",
-TRUE     "species": "Xexto",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ben Quadinaros",
-TRUE     "height": 163,
-TRUE     "mass": 65,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey, green, yellow",
-TRUE     "eye_color": "orange",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tund",
-TRUE     "species": "Toong",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Mace Windu",
-TRUE     "height": 188,
-TRUE     "mass": 84,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 72,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Haruun Kal",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ki-Adi-Mundi",
-TRUE     "height": 198,
-TRUE     "mass": 82,
-TRUE     "hair_color": "white",
-TRUE     "skin_color": "pale",
-TRUE     "eye_color": "yellow",
-TRUE     "birth_year": 92,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Cerea",
-TRUE     "species": "Cerean",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Kit Fisto",
-TRUE     "height": 196,
-TRUE     "mass": 87,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "black",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Glee Anselm",
-TRUE     "species": "Nautolan",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Eeth Koth",
-TRUE     "height": 171,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "brown",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Iridonia",
-TRUE     "species": "Zabrak",
-TRUE     "films": ["The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Adi Gallia",
-TRUE     "height": 184,
-TRUE     "mass": 50,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "blue",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Coruscant",
-TRUE     "species": "Tholothian",
-TRUE     "films": ["The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Saesee Tiin",
-TRUE     "height": 188,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "pale",
-TRUE     "eye_color": "orange",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Iktotch",
-TRUE     "species": "Iktotchi",
-TRUE     "films": ["The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Yarael Poof",
-TRUE     "height": 264,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "white",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Quermia",
-TRUE     "species": "Quermian",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Plo Koon",
-TRUE     "height": 188,
-TRUE     "mass": 80,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "orange",
-TRUE     "eye_color": "black",
-TRUE     "birth_year": 22,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Dorin",
-TRUE     "species": "Kel Dor",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Jedi starfighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Mas Amedda",
-TRUE     "height": 196,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "blue",
-TRUE     "eye_color": "blue",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Champala",
-TRUE     "species": "Chagrian",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Gregar Typho",
-TRUE     "height": 185,
-TRUE     "mass": 85,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["Naboo fighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Cordé",
-TRUE     "height": 157,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Cliegg Lars",
-TRUE     "height": 183,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 82,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Tatooine",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Poggle the Lesser",
-TRUE     "height": 183,
-TRUE     "mass": 80,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "green",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Geonosis",
-TRUE     "species": "Geonosian",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Luminara Unduli",
-TRUE     "height": 170,
-TRUE     "mass": 56.2,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "yellow",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 58,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Mirial",
-TRUE     "species": "Mirialan",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Barriss Offee",
-TRUE     "height": 166,
-TRUE     "mass": 50,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "yellow",
-TRUE     "eye_color": "blue",
-TRUE     "birth_year": 40,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Mirial",
-TRUE     "species": "Mirialan",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Dormé",
-TRUE     "height": 165,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Dooku",
-TRUE     "height": 193,
-TRUE     "mass": 80,
-TRUE     "hair_color": "white",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 102,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Serenno",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": ["Flitknot speeder"],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Bail Prestor Organa",
-TRUE     "height": 191,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "tan",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 67,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Alderaan",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Jango Fett",
-TRUE     "height": 183,
-TRUE     "mass": 79,
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "tan",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 66,
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Concord Dawn",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Zam Wesell",
-TRUE     "height": 168,
-TRUE     "mass": 55,
-TRUE     "hair_color": "blonde",
-TRUE     "skin_color": "fair, green, yellow",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Zolan",
-TRUE     "species": "Clawdite",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": ["Koro-2 Exodrive airspeeder"],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Dexter Jettster",
-TRUE     "height": 198,
-TRUE     "mass": 102,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "brown",
-TRUE     "eye_color": "yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Ojom",
-TRUE     "species": "Besalisk",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Lama Su",
-TRUE     "height": 229,
-TRUE     "mass": 88,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "black",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Kamino",
-TRUE     "species": "Kaminoan",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Taun We",
-TRUE     "height": 213,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "black",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Kamino",
-TRUE     "species": "Kaminoan",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Jocasta Nu",
-TRUE     "height": 167,
-TRUE     "hair_color": "white",
-TRUE     "skin_color": "fair",
-TRUE     "eye_color": "blue",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Coruscant",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Ratts Tyerell",
-TRUE     "height": 79,
-TRUE     "mass": 15,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey, blue",
-TRUE     "eye_color": "unknown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Aleen Minor",
-TRUE     "species": "Aleena",
-TRUE     "films": ["The Phantom Menace"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "R4-P17",
-TRUE     "height": 96,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "silver, red",
-TRUE     "eye_color": "red, blue",
-TRUE     "sex": "none",
-TRUE     "gender": "feminine",
-TRUE     "species": "Droid",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Wat Tambor",
-TRUE     "height": 193,
-TRUE     "mass": 48,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "green, grey",
-TRUE     "eye_color": "unknown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Skako",
-TRUE     "species": "Skakoan",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "San Hill",
-TRUE     "height": 191,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "gold",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Muunilinst",
-TRUE     "species": "Muun",
-TRUE     "films": ["Attack of the Clones"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Shaak Ti",
-TRUE     "height": 178,
-TRUE     "mass": 57,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "red, blue, white",
-TRUE     "eye_color": "black",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Shili",
-TRUE     "species": "Togruta",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Grievous",
-TRUE     "height": 216,
-TRUE     "mass": 159,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "brown, white",
-TRUE     "eye_color": "green, yellow",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Kalee",
-TRUE     "species": "Kaleesh",
-TRUE     "films": ["Revenge of the Sith"],
-TRUE     "vehicles": ["Tsmeu-6 personal wheel bike"],
-TRUE     "starships": ["Belbullab-22 starfighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "Tarfful",
-TRUE     "height": 234,
-TRUE     "mass": 136,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "brown",
-TRUE     "eye_color": "blue",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Kashyyyk",
-TRUE     "species": "Wookiee",
-TRUE     "films": ["Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Raymus Antilles",
-TRUE     "height": 188,
-TRUE     "mass": 79,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Alderaan",
-TRUE     "species": "Human",
-TRUE     "films": ["Revenge of the Sith", "A New Hope"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Sly Moore",
-TRUE     "height": 178,
-TRUE     "mass": 48,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "pale",
-TRUE     "eye_color": "white",
-TRUE     "homeworld": "Umbara",
-TRUE     "films": ["Attack of the Clones", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Tion Medon",
-TRUE     "height": 206,
-TRUE     "mass": 80,
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "grey",
-TRUE     "eye_color": "black",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "homeworld": "Utapau",
-TRUE     "species": "Pau'an",
-TRUE     "films": ["Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Finn",
-TRUE     "hair_color": "black",
-TRUE     "skin_color": "dark",
-TRUE     "eye_color": "dark",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Rey",
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "hazel",
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Poe Dameron",
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "sex": "male",
-TRUE     "gender": "masculine",
-TRUE     "species": "Human",
-TRUE     "films": ["The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["T-70 X-wing fighter"]
-TRUE   },
-TRUE   {
-TRUE     "name": "BB8",
-TRUE     "hair_color": "none",
-TRUE     "skin_color": "none",
-TRUE     "eye_color": "black",
-TRUE     "sex": "none",
-TRUE     "gender": "masculine",
-TRUE     "species": "Droid",
-TRUE     "films": ["The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Captain Phasma",
-TRUE     "hair_color": "unknown",
-TRUE     "skin_color": "unknown",
-TRUE     "eye_color": "unknown",
-TRUE     "films": ["The Force Awakens"],
-TRUE     "vehicles": [],
-TRUE     "starships": []
-TRUE   },
-TRUE   {
-TRUE     "name": "Padmé Amidala",
-TRUE     "height": 165,
-TRUE     "mass": 45,
-TRUE     "hair_color": "brown",
-TRUE     "skin_color": "light",
-TRUE     "eye_color": "brown",
-TRUE     "birth_year": 46,
-TRUE     "sex": "female",
-TRUE     "gender": "feminine",
-TRUE     "homeworld": "Naboo",
-TRUE     "species": "Human",
-TRUE     "films": ["Attack of the Clones", "The Phantom Menace", "Revenge of the Sith"],
-TRUE     "vehicles": [],
-TRUE     "starships": ["H-type Nubian yacht", "Naboo star skiff", "Naboo fighter"]
-TRUE   }
-TRUE ]
+  [
+    {
+      "name": "Cordé",
+      "height": 157,
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "sex": "female",
+      "gender": "feminine",
+      "homeworld": "Naboo",
+      "species": "Human",
+      "films": ["Attack of the Clones"],
+      "vehicles": [],
+      "starships": []
+    },
+    {
+      "name": "Dud Bolt",
+      "height": 94,
+      "mass": 45,
+      "hair_color": "none",
+      "skin_color": "blue, grey",
+      "eye_color": "yellow",
+      "sex": "male",
+      "gender": "masculine",
+      "homeworld": "Vulpter",
+      "species": "Vulptereen",
+      "films": ["The Phantom Menace"],
+      "vehicles": [],
+      "starships": []
+    }
+  ]
 ```
-]
+
+---
+
+R knows different `NA`-values, but JSON only has `null` to represent those...
+
+- By default, `NA`'s are treated as strings (in numeric vectors)
+  - so the string is no longer homogeneous, cause errors in statistical operations
+  - but all information is preserved 
+  
+
+```r
+&gt; (toJSON(c(3.14, NA, NaN, 21, Inf, -Inf)))
+```
+
+```
+  [3.14,"NA","NaN",21,"Inf","-Inf"]
+```
+  
+- You can choose to represent them as null
+  - keeping the vector numeric
+  - but loosing information
+
+
+```r
+&gt; (toJSON(c(3.14, NA, NaN, 21, Inf, -Inf), na = "null"))
+```
+
+```
+  [3.14,null,null,21,null,null]
+```
+
+
+
+---
+
+## Changing back and forth
+
+- Note that there is no guaranteed one-to-one correspondence of R and JSON objects:
+  - it will still be the encoded data
+  - but ordering, class, etc. may differ
+
+
+```r
+&gt; (example &lt;- slice_sample(starwars, n = 2))
+```
+
+```
+  # A tibble: 2 x 14
+    name       height  mass hair_color skin_color eye_color birth_year sex   gender
+    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+  1 Jocasta Nu    167    NA white      fair       blue              NA fema~ femin~
+  2 Yoda           66    17 white      green      brown            896 male  mascu~
+  # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+  #   vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+```r
+&gt; fromJSON(toJSON(example))
+```
+
+```
+          name height hair_color skin_color eye_color    sex    gender homeworld
+  1 Jocasta Nu    167      white       fair      blue female  feminine Coruscant
+  2       Yoda     66      white      green     brown   male masculine      &lt;NA&gt;
+           species
+  1          Human
+  2 Yoda's species
+                                                                                                         films
+  1                                                                                       Attack of the Clones
+  2 The Empire Strikes Back, Attack of the Clones, The Phantom Menace, Revenge of the Sith, Return of the Jedi
+    vehicles starships mass birth_year
+  1     NULL      NULL   NA         NA
+  2     NULL      NULL   17        896
+```
+
+if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
+
+```r
+&gt; unserializeJSON(serializeJSON(example))
+```
+
+```
+  # A tibble: 2 x 14
+    name       height  mass hair_color skin_color eye_color birth_year sex   gender
+  * &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+  1 Jocasta Nu    167    NA white      fair       blue              NA fema~ femin~
+  2 Yoda           66    17 white      green      brown            896 male  mascu~
+  # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+  #   vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+But the downside is that the JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
+
+
+```r
+&gt; serializeJSON(example)
+```
+
+```
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","height","mass","hair_color","skin_color","eye_color","birth_year","sex","gender","homeworld","species","films","vehicles","starships"]},"row.names":{"type":"integer","attributes":{},"value":[1,2]},"class":{"type":"character","attributes":{},"value":["tbl_df","tbl","data.frame"]}},"value":[{"type":"character","attributes":{},"value":["Jocasta Nu","Yoda"]},{"type":"integer","attributes":{},"value":[167,66]},{"type":"double","attributes":{},"value":["NA",17]},{"type":"character","attributes":{},"value":["white","white"]},{"type":"character","attributes":{},"value":["fair","green"]},{"type":"character","attributes":{},"value":["blue","brown"]},{"type":"double","attributes":{},"value":["NA",896]},{"type":"character","attributes":{},"value":["female","male"]},{"type":"character","attributes":{},"value":["feminine","masculine"]},{"type":"character","attributes":{},"value":["Coruscant",null]},{"type":"character","attributes":{},"value":["Human","Yoda's species"]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":["Attack of the Clones"]},{"type":"character","attributes":{},"value":["The Empire Strikes Back","Attack of the Clones","The Phantom Menace","Revenge of the Sith","Return of the Jedi"]}]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":[]},{"type":"character","attributes":{},"value":[]}]},{"type":"list","attributes":{},"value":[{"type":"character","attributes":{},"value":[]},{"type":"character","attributes":{},"value":[]}]}]}
+```
+
 
 ---
 # Practice Example
 
 
 ```r
-# Pokedex_JSON
-# Pokedex_df
-
-# some_funny_analysis
+&gt; # Pokedex_JSON
+&gt; # Pokedex_df
+&gt; 
+&gt; # some_funny_analysis
 ```
 
     </textarea>

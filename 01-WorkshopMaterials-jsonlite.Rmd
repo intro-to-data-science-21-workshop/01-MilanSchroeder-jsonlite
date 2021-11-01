@@ -28,20 +28,14 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r load_json}
 # if necessary: 
 # install.packages("jsonlite")
-# install.packages("RJSONIO")
 library(jsonlite)
 library(tidyverse)
-library(RJSONIO)
 ```
 
 First, what does JSON actually look like?
-
-
-Simplification is the process where JSON arrays automatically get converted from a list into a more specific R class. The fromJSON function has 3 arguments which control the simplification process: simplifyVector, simplifyDataFrame and simplifyMatrix. Each one is enabled by default.
+We can write own JSON object (just for demonstration):
 
 ```{r writeJSON}
-# We can write own JSON data (just for demonstration):
-
 todays_instructors <-
 '[
 {
@@ -54,28 +48,31 @@ todays_instructors <-
 "Name": "Sangeeth",
 "Age": 25,
 "Programme": "MPP",
-"Likes_IDS_class": "NA"
+"Likes_IDS_class": null
 }
 ]'
 ```
 
 Remember the chart from our presentation?
 <img src="https://www.json.org/img/object.png" height=440>
+
 That's exactly what we did here!
 
 ```{r isJSON}
-RJSONIO::isValidJSON(todays_instructors, 
-                     asText = T)
+jsonlite::validate(todays_instructors)
 # note that if we would e.g. have forgotten some "", it wouldn't be a valid JSON object.
+# whitespaces and indentation may be used arbitrarily
 ```
 
-Our Data is actually a valid JSON object!
+Our Data is actually a valid JSON object! So let's see what we can do with that...
 
 ```{r}
 print(todays_instructors)
 ```
 
-Not very easy to read (or use) as raw text... let's convert it (using one of two key functions of the 'jsonlite' package: 'fromJSON')
+Not very easy to read (or use) as raw text... let's convert it!
+
+# First key command: `fromJSON`
 
 ```{r}
 (not_simplified <- jsonlite::fromJSON(todays_instructors, 
@@ -90,7 +87,7 @@ It's basically the structure of a (named) list in R
 str(not_simplified)
 ```
 
-More specifically, it's a list of 2 which each represent lists of each key-value pair
+More specifically, it's a list of 2 which each represent lists of all 4 key-value pairs
 
 ...but it's still rather difficult to access (especially if you want multiple values...)
 
@@ -98,46 +95,26 @@ More specifically, it's a list of 2 which each represent lists of each key-value
 not_simplified[[1]]$Likes_IDS_class
 ```
 
-
-
-## short excurse: 'RJSONIO'
-
-Just to show that there is another package that deals with JSON data in R:
-
-The 'RJSONIO' package also has a command called 'fromJSON', which gives us a slightly different structure:
+We can transform it to a dataframe manually:
 
 ```{r}
-(alternative_list <- RJSONIO::fromJSON(todays_instructors, 
-                                       simplify = T))
-str(alternative_list)
-```
+# but we would have to recode null-values before, because they can not be interpreted as arrays usually: 
+not_simplified[[2]]$Likes_IDS_class <- NA
 
-This gives us a list of 2 named vectors... that looks very much like a dataframe... and can easily be transformed:
-
-```{r}
-as.data.frame(alternative_list)
-# unload RJSONIO package, to avoid confusion of functions:
-detach("package:RJSONIO")
-```
-But: it's a 4x2 dataframe, with variables as rows and cases as columns... not what R would usually expect. So better stick to 'jsonlite'
-
-
-
-## back to 'jsonlite'
-
-
-We can do for the first list from 'jsonlite'´s 'fromJSON':
-
-```{r}
 bind_rows(not_simplified[[1]] %>% 
             as_data_frame(), 
-          not_simplified[[2]] %>% 
+            not_simplified[[2]] %>% 
             as_data_frame())
 ```
 
-... but both is rather lengthy...
+... but that is rather lengthy...
 
-Luckily, 'jsonlite' allows us to do all that in just one step, using the 'simplified' option (which is also set to 'true' by default!)
+Luckily, `jsonlite` allows us to do all that in just one step, using the `simplify*` options:
+
+Simplification is the process where JSON arrays automatically get converted from a list into a more specific R class. 
+The fromJSON function has 3 arguments which control the simplification process: `simplifyVector`, `simplifyDataFrame` and `simplifyMatrix`. 
+Each one is enabled by default.
+
 
 ```{r}
 (simplified <- jsonlite::fromJSON(todays_instructors, 
@@ -176,6 +153,9 @@ But can we change this structure to a dataframe, too?
 nested_df$array
 nested_df$matrix
 nested_df$list
+
+jsonlite::flatten(nested_df)
+jsonlite::
 ```
 
 
@@ -183,7 +163,7 @@ nested_df$list
 
 
 
-# Second key command: 'toJSON'
+# Second key command: `toJSON`
 
 We can convert objects from JSON, so of course we also can convert them back:
 
@@ -231,7 +211,7 @@ They all sound super interesting, so **make sure to check them out**!
 try to load the data in the folder, manipulate it (either in JSON-Format or converted to a tibble), and convert it back!
 
 try for example: https://pokeapi.co/api/v2/pokedex
-or use the 'palmerpenguins::penguins', or 'cars'  dataset.
+or use the `palmerpenguins::penguins`, or `cars` dataset.
 
 ```{r}
 # Your code here:

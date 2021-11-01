@@ -17,14 +17,21 @@ knitr::opts_chunk$set(echo = TRUE,
                       error = FALSE,
                       message = FALSE,
                       warning = FALSE,
-                      comment = TRUE)
+                      comment = " ",
+                      prompt = TRUE,
+                      fig.align="center", #fig.width=6, fig.height=4.5, 
+                      # out.width="748px", #out.length="520.75px",
+                      dpi=300, #fig.path='Figs/',
+                      cache=F, #echo=F, warning=F, message=F
+                      engine.opts = list(bash = "-l"))
+
 library(pacman)
 p_load(xaringan, jsonlite, tidyverse)
 ```
 
 # Intro
 
-# 1st slide
+## 1st slide
 - What is JSON?
 
 - History of the package
@@ -37,13 +44,25 @@ p_load(xaringan, jsonlite, tidyverse)
 - Where is it used?
 
 ---
-# Structure of JSON objects
+# Data Structures in JSON
 
-- object (think: list in R)
-
+- object
+  - unordered list of key : value pairs
+  - similar to a dictionary
+  - can include all types of JSON structures
+  
+  
 - array
+  - ordered sequence of values
+  - similar to R's vector-class
+  - datatype can be heterogeneous
+
 
 - value
+  - no direct representation in R
+  - some are similar to vector of length 1
+  - values can be nested
+
 ---
 # object
 <img src="https://www.json.org/img/object.png" height=440>
@@ -56,30 +75,73 @@ p_load(xaringan, jsonlite, tidyverse)
 
 ---
 
-# Key functions:
-
-.pull-left[
-## fromJSON
+# Key functions: `fromJSON`
 
 ```{r fromJSON}
-# fromJSON(todays_instructors, simplify = T, nullValue = F)
-
 workshops = fromJSON("https://api.github.com/orgs/intro-to-data-science-21-workshop/repos")
 
-workshops %>% select(name, description, updated_at)
-# They all sound super interesting, make sure to check them out!
+workshops %>% 
+  filter(!is.na(description)) %>% 
+  select(description)
+# Make sure to check out the other workshops, too!
 ```
 
-]
+---
 
-.pull-right[
-## toJSON
+# Key functions: `toJSON`
 
 ```{r toJSON}
-# toJSON(todays_instructors, pretty = T)
-starwars %>% slice_sample(n = 3) %>% toJSON(pretty = T)
+starwars %>% slice_sample(n = 2) %>% 
+  toJSON(pretty = T)
 ```
-]
+
+---
+
+R knows different `NA`-values, but JSON only has `null` to represent those...
+
+- By default, `NA`'s are treated as strings (in numeric vectors)
+  - so the string is no longer homogeneous, cause errors in statistical operations
+  - but all information is preserved 
+  
+```{r}
+(toJSON(c(3.14, NA, NaN, 21, Inf, -Inf)))
+```
+  
+- You can choose to represent them as null
+  - keeping the vector numeric
+  - but loosing information
+
+```{r}
+(toJSON(c(3.14, NA, NaN, 21, Inf, -Inf), na = "null"))
+
+```
+
+
+
+---
+
+## Changing back and forth
+
+- Note that there is no guaranteed one-to-one correspondence of R and JSON objects:
+  - it will still be the encoded data
+  - but ordering, class, etc. may differ
+
+```{r}
+(example <- slice_sample(starwars, n = 2))
+fromJSON(toJSON(example))
+```
+
+if you - for whatever reason - need it to be consistent, use `(un)serializeJSON` instead
+```{r}
+unserializeJSON(serializeJSON(example))
+```
+
+But the downside is that the JSON structure has to be much harder to read (or transfer to other languages), to perfectly resemble the original...
+
+```{r}
+serializeJSON(example)
+```
+
 
 ---
 # Practice Example
