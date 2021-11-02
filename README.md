@@ -27,7 +27,12 @@ The goals of this session are to
 
 ## Further resources
 
-- 
+- https://www.json.org/json-en.html
+- https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html
+- https://cran.r-project.org/web/packages/jsonlite/index.html # type: help(jsonlite)
+- https://github.com/jdorfman/Awesome-JSON-Datasets # a selection of JSON datasets on various topics
+- https://arxiv.org/abs/1403.2805
+
 
 ## License
 
