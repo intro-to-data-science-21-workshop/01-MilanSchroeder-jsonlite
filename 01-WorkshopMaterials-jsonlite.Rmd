@@ -12,9 +12,6 @@ output:
     toc: no
 ---
 
-### Get to know the package and data type:
-
-First, we have to load the package:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       eval = TRUE,
@@ -24,6 +21,10 @@ knitr::opts_chunk$set(echo = TRUE,
                       comment = TRUE)
 ```
 
+
+### Get to know the package and data type:
+
+First, we have to load the package:
 
 ```{r load_json}
 # if necessary: 
@@ -210,10 +211,11 @@ They all sound super interesting, so **make sure to check them out**!
 
 # Now it's your turn!
 
-try to load the data in the folder, manipulate it (either in JSON-Format or converted to a tibble), and convert it back!
+try to load some JSON data, convert and manipulate it, and convert it back!
 
-try for example: https://pokeapi.co/api/v2/pokedex
-or use the `palmerpenguins::penguins`, or `cars` dataset.
+try for example: https://pokeapi.co/api/v2/pokedex, check out your own GitHub page via API, or use the `palmerpenguins::penguins`, or `cars` dataset.
+
+There are literally millions of interesting databases on the Web (see https://github.com/jdorfman/Awesome-JSON-Datasets), so pick something that interests you!
 
 ```{r}
 # Your code here:
